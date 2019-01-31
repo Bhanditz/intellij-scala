@@ -11,22 +11,21 @@ import com.intellij.psi.PsiElement
 /**
  * Jason Zaugg
  */
+final class AddNameToArgumentIntention extends PsiElementBaseIntentionAction {
 
-object AddNameToArgumentIntention {
-  def familyName = "Use named arguments"
-}
-
-class AddNameToArgumentIntention extends PsiElementBaseIntentionAction {
-  def getFamilyName: String = AddNameToArgumentIntention.familyName
-
-  override def getText = "Use named arguments for current and subsequent arguments"
-
-  def isAvailable(project: Project, editor: Editor, element: PsiElement): Boolean = {
+  override def isAvailable(project: Project, editor: Editor, element: PsiElement): Boolean =
     addNameToArgumentsFix(element, onlyBoolean = false).isDefined
-  }
 
   override def invoke(project: Project, editor: Editor, element: PsiElement) {
     if (!element.isValid) return
     addNameToArgumentsFix(element, onlyBoolean = false).foreach(_.apply())
   }
+
+  override def getFamilyName: String = AddNameToArgumentIntention.FamilyName
+
+  override def getText = "Use named arguments for current and subsequent arguments"
+}
+
+object AddNameToArgumentIntention {
+  private[argument] val FamilyName = "Use named arguments"
 }
